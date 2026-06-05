@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Andika - Linktree</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --bg-base: #f5f4f0;        /* warm off-white */
+            --bg-blur: #ddd8cc;        /* warm muted sand blur */
+            --primary: #e8d48b;        /* soft muted gold */
+            --dark: #2c2c2c;           /* soft dark (not harsh black) */
+            --light: #fefefe;          
+            --green: #5fba8f;          /* muted sage green */
+            --shadow-offset: 5px;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            -webkit-tap-highlight-color: transparent;
+            -webkit-focus-ring-color: transparent;
+            outline: none;
+        }
+
+        a, button {
+            outline: none !important;
+            -webkit-tap-highlight-color: transparent !important;
+            user-select: none;
+        }
+
+        a:focus, a:focus-visible, button:focus, button:focus-visible {
+            outline: none !important;
+            box-shadow: none !important;
+        }
+
+        body {
+            background-color: var(--bg-base);
+            font-family: 'Poppins', sans-serif;
+            display: flex;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 20px;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        body::before {
+            content: "";
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 80vw;
+            height: 80vh;
+            max-width: 600px;
+            max-height: 600px;
+            background: radial-gradient(ellipse at center, #d9d3c5 0%, #e8e2d5 50%, transparent 100%);
+            filter: blur(110px);
+            z-index: -1;
+            border-radius: 50%;
+            opacity: 0.9;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 480px;
+            text-align: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* --- Profile Section --- */
+        .profile-card {
+            background: var(--light);
+            border: 3px solid var(--dark);
+            border-radius: 16px;
+            margin-bottom: 30px;
+            position: relative;
+            box-shadow: var(--shadow-offset) var(--shadow-offset) 0px rgba(44,44,44,0.55);
+            overflow: visible; /* Agar avatar bisa keluar dari kotak */
+        }
+
+        .cover-photo {
+            width: 100%;
+            height: 140px;
+            object-fit: cover;
+            display: block;
+            border-radius: 13px 13px 0 0;
+        }
+
+        .profile-content {
+            padding: 0 20px 20px;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Avatar column: avatar + username di bawahnya */
+        .avatar-column {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100px;
+        }
+
+        .avatar-wrapper {
+            margin-top: -70px; /* 70% di dalam cover, 30% di luar */
+            margin-bottom: 6px;
+        }
+
+        .avatar-container {
+            width: 100px;
+            height: 100px;
+            border: 4px solid var(--light);
+            border-radius: 50%;
+            overflow: hidden;
+            background: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+
+        .avatar-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* Username di bawah avatar, ngepas di tengah */
+        .username-wrapper {
+            width: 100%;
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 1.8rem; /* DIPERBESAR */
+            font-weight: 700;
+            color: var(--dark);
+            margin-bottom: 0;
+            letter-spacing: -0.3px;
+            display: inline-block;
+        }
+
+        /* Online Badge - DI DALAM KOTAK, di tempat kosong kanan atas area putih */
+        .online-badge {
+            position: absolute;
+            top: 15px; /* Masuk ke dalam area putih, tidak nempel cover */
+            right: 20px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 14px;
+            background: var(--light);
+            border: 2px solid var(--dark);
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--dark);
+            box-shadow: 2px 2px 0px rgba(0,0,0,0.1);
+            z-index: 2;
+        }
+
+        .online-dot {
+            width: 8px;
+            height: 8px;
+            background: var(--green);
+            border-radius: 50%;
+            animation: blink 1.5s infinite;
+        }
+
+        @keyframes blink {
+            0%, 100% {
+                opacity: 1;
+                box-shadow: 0 0 4px var(--green);
+            }
+            50% {
+                opacity: 0.3;
+                box-shadow: 0 0 0px var(--green);
+            }
+        }
+
+        /* Bio */
+        .bio {
+            font-size: 0.85rem;
+            color: #555;
+            line-height: 1.5;
+            text-align: left;
+            padding-left: 4px;
+            margin-top: 15px;
+        }
+
+        /* --- Links Section - KOMIK STYLE --- */
+        .links-container {
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+        }
+
+        .comic-btn {
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            background: var(--light);
+            color: var(--dark);
+            padding: 16px 20px;
+            border: 3px solid var(--dark);
+            font-weight: 700;
+            font-size: 1.15rem;
+            position: relative;
+            transition: all 0.25s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            box-shadow: var(--shadow-offset) var(--shadow-offset) 0px rgba(44,44,44,0.55);
+        }
+
+        .comic-btn:nth-child(1) { background-color: #fefefe; }
+        .comic-btn:nth-child(2) { background-color: #f7f5f0; }
+        .comic-btn:nth-child(3) { background-color: #f8f5f2; }
+        .comic-btn:nth-child(4) { background-color: #f4f6f4; }
+
+        .comic-btn:hover {
+            transform: translate(-3px, -3px);
+            box-shadow: 8px 8px 0px rgba(44,44,44,0.5);
+        }
+
+        .comic-btn:active {
+            transform: translate(2px, 2px);
+            box-shadow: 1px 1px 0px rgba(44,44,44,0.4);
+        }
+
+        .btn-content {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            width: 100%;
+        }
+
+        .icon-wrapper {
+            width: 46px;
+            height: 46px;
+            background-color: var(--light);
+            border: 2.5px solid var(--dark);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            box-shadow: 2px 2px 0px rgba(0,0,0,0.1);
+        }
+
+        .icon-svg {
+            width: 26px;
+            height: 26px;
+            fill: var(--dark);
+        }
+
+        .icon-svg.whatsapp {
+            fill: #3dbb6c;
+        }
+
+        .btn-text {
+            flex-grow: 1;
+            text-align: left;
+            letter-spacing: 0.3px;
+        }
+
+        .arrow-icon {
+            width: 24px;
+            height: 24px;
+            fill: var(--dark);
+            opacity: 0.7;
+            transition: transform 0.2s ease;
+        }
+
+        .comic-btn:hover .arrow-icon {
+            transform: translateX(4px);
+            opacity: 1;
+        }
+
+        /* --- Footer - 2 BARIS --- */
+        footer {
+            margin-top: 40px;
+            font-size: 0.9rem;
+            color: var(--dark);
+            font-weight: 500;
+            text-align: center;
+            padding: 10px;
+            line-height: 1.8;
+        }
+
+        footer a {
+            color: var(--dark);
+            font-weight: 700;
+            text-decoration: none;
+            border-bottom: 2px solid var(--primary);
+            transition: all 0.2s ease;
+        }
+
+        footer a:hover {
+            background: var(--primary);
+            padding: 0 4px;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        
+        <!-- Header Profile -->
+        <header class="profile-card">
+            <!-- Cover Photo -->
+            <img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&h=400&fit=crop" alt="Cover" class="cover-photo">
+            
+            <div class="profile-content">
+                <!-- Avatar + Username di bawahnya (satu kolom) -->
+                <div class="avatar-column">
+                    <div class="avatar-wrapper">
+                        <div class="avatar-container">
+                            <img src="https://i.ibb.co.com/4ZbM0thh/AIRetouch-20260516-103357272.png" alt="Avatar" class="avatar-img">
+                        </div>
+                    </div>
+                    
+                    <div class="username-wrapper">
+                        <h1>Andika</h1>
+                    </div>
+                </div>
+                
+                <!-- Online Badge - DI DALAM KOTAK (area putih), di tempat kosong kanan atas -->
+                <div class="online-badge">
+                    <span>Online</span>
+                    <span class="online-dot"></span>
+                </div>
+                
+                <!-- Bio -->
+                <p class="bio">terimakasih untuk semuanya udah mampir ke sini, berkat semuanya aku ada di titik sekarang, buat kalian yang mau join saluran ada di bawah yah</p>
+            </div>
+        </header>
+
+        <!-- Daftar Link - KOMIK STYLE -->
+        <main class="links-container">
+            
+            <!-- Link 1: WhatsApp Admin -->
+            <a href="https://wa.me/qr/74JALTPNIT3DH1" target="_blank" class="comic-btn">
+                <div class="btn-content">
+                    <div class="icon-wrapper">
+                        <svg class="icon-svg whatsapp" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+                        </svg>
+                    </div>
+                    <span class="btn-text">whatsapp admin</span>
+                    <svg class="arrow-icon" viewBox="0 0 24 24"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z"/></svg>
+                </div>
+            </a>
+
+            <!-- Link 2: Saluran WhatsApp -->
+            <a href="https://whatsapp.com/channel/0029Vb8BZQd5kg79uVlr3x3r" target="_blank" class="comic-btn">
+                <div class="btn-content">
+                    <div class="icon-wrapper">
+                        <svg class="icon-svg whatsapp" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+                        </svg>
+                    </div>
+                    <span class="btn-text">saluran admin</span>
+                    <svg class="arrow-icon" viewBox="0 0 24 24"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z"/></svg>
+                </div>
+            </a>
+
+            <!-- Link 3: Instagram Admin -->
+            <a href="https://www.instagram.com/hrdyy_stcuu?igsh=MWdydjJwNmhyZXkwbA==" target="_blank" class="comic-btn">
+                <div class="btn-content">
+                    <div class="icon-wrapper">
+                        <svg class="icon-svg" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+                        </svg>
+                    </div>
+                    <span class="btn-text">Instagram admin</span>
+                    <svg class="arrow-icon" viewBox="0 0 24 24"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z"/></svg>
+                </div>
+            </a>
+
+            <!-- Link 4: Tiktok Admin -->
+            <a href="https://tiktok.com/@dixzz.02" target="_blank" class="comic-btn">
+                <div class="btn-content">
+                    <div class="icon-wrapper">
+                        <svg class="icon-svg" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93v6.16c0 2.52-1.12 4.84-2.9 6.24-1.72 1.36-4.03 1.92-6.18 1.55-2.42-.41-4.5-2.08-5.42-4.38-.95-2.38-.35-5.24 1.52-7.02 1.07-1.02 2.44-1.64 3.88-1.75v4.11c-.56.09-1.11.33-1.56.71-.87.75-1.16 2.03-.68 3.1.46 1.03 1.56 1.66 2.68 1.55 1.25-.12 2.26-1.15 2.33-2.41V.02z"/>
+                        </svg>
+                    </div>
+                    <span class="btn-text">Tiktok admin</span>
+                    <svg class="arrow-icon" viewBox="0 0 24 24"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z"/></svg>
+                </div>
+            </a>
+
+        </main>
+
+        <!-- Footer - 2 BARIS -->
+        <footer>
+            mau bikin website kaya gini ? langsung hub<br>
+            <a href="https://wa.me/qr/74JALTPNIT3DH1" target="_blank">admin sekarang</a>
+        </footer>
+
+    </div>
+
+</body>
+</html>
